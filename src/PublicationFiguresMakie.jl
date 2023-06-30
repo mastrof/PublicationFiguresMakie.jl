@@ -15,12 +15,13 @@ _MARKERS = [
     :hexagon, :pentagon, :cross, :xcross,
     :star4, :star5, :star6, :star8
 ]
+_COLORSCHEME = colorschemes[:Dark2_8]
 
 Publication = Theme(
     #= global properties =#
     fontsize = 32,
     palette = (
-        color = colorschemes[:Dark2_8],
+        color = _COLORSCHEME,
         marker = _MARKERS,
         linestyle = :solid,
     ),
@@ -46,6 +47,7 @@ Publication = Theme(
         ticksvisible = false,
     ),
 
+    #= plot-specific properties =#
     Lines = (
         linewidth = 4,
         cycle = Cycle([:color])
@@ -60,6 +62,11 @@ Publication = Theme(
         linewidth = 4,
         markersize = 16,
         cycle = Cycle([:color, :marker], covary=true)
+    ),
+
+    Series = (
+        linewidth = 4,
+        color = _COLORSCHEME.colors
     )
 )
 
@@ -80,8 +87,31 @@ function demo_plot_single()
     ax.xlabel = "φ"
     ax.ylabel = "sinc(kφ)"
     axislegend("k", position=:rt)
-    fig, ax
+    fig
 end
 
+function demo_plot_twocolumns()
+    x = range(0.01, 1, length=30)
+    k = [2, 3, 4, 6]
+    y = @. x^2 * exp(-k'*x)
+    z = @. - x^2 * exp(-k'*x)
+
+    fig = Figure(resolution = TwoColumns(1))
+
+    axr = Axis(fig[1,2])
+    series!(axr, x, z')
+    axr.xlabel = "x"
+    axr.ylabel = "z"
+    axr.xscale = log10
+
+    axl = Axis(fig[1,1])
+    for (i,k) in enumerate(k)
+        scatterlines!(axl, x, y[:,i], label="$k")
+    end
+    axl.xlabel = "τ / Tₛ"
+    axl.ylabel = "y"
+
+    fig
+end
 
 end
