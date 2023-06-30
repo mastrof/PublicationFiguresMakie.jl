@@ -71,8 +71,8 @@ Publication = Theme(
 )
 
 SinglePlot() = (800, 600)
-SingleColumn(n) = (800, 600*n)
-TwoColumns(n) = (1600, 600*n)
+SingleColumn(n=1) = (800, 600*n)
+TwoColumns(n=1) = (1600, 600*n)
 
 
 function demo_plot_single()
