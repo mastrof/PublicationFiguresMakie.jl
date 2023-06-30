@@ -26,8 +26,10 @@ Publication = Theme(
         linestyle = :solid,
     ),
     Axis = (
+        # grid
         xgridvisible = false,
         ygridvisible = false,
+        # ticks
         xticksize = -10,
         yticksize = -10,
         xminorticksvisible = true,
@@ -36,6 +38,9 @@ Publication = Theme(
         yminorticksize = -5,
         xticksmirrored = true,
         yticksmirrored = true,
+        # title
+        titlefont = :regular,
+        titlesize = 24,
     ),
     Legend = (
         framevisible = false,
@@ -45,6 +50,12 @@ Publication = Theme(
     ),
     Colorbar = (
         ticksvisible = false,
+    ),
+    Label = (
+        font = :bold,
+        fontsize = 32,
+        halign = :center,
+        padding = (0, 5, 5, 0)
     ),
 
     #= plot-specific properties =#
@@ -94,7 +105,7 @@ function demo_plot_twocolumns()
     x = range(0.01, 1, length=30)
     k = [2, 3, 4, 6]
     y = @. x^2 * exp(-k'*x)
-    z = @. - x^2 * exp(-k'*x)
+    z = @. x * exp(-k'*x)
 
     fig = Figure(resolution = TwoColumns(1))
 
@@ -102,7 +113,6 @@ function demo_plot_twocolumns()
     series!(axr, x, z')
     axr.xlabel = "x"
     axr.ylabel = "z"
-    axr.xscale = log10
 
     axl = Axis(fig[1,1])
     for (i,k) in enumerate(k)
@@ -110,6 +120,9 @@ function demo_plot_twocolumns()
     end
     axl.xlabel = "τ / Tₛ"
     axl.ylabel = "y"
+
+    Label(fig[1, 1, TopLeft()], "A")
+    Label(fig[1, 2, TopLeft()], "B")
 
     fig
 end
